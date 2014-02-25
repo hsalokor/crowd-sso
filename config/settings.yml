@@ -1,0 +1,4 @@
+crowd_sso:
+  crowd_sso_url: ''
+  crowd_sso_application_name: ''
+  crowd_sso_application_password: ''

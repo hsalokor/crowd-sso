@@ -1,0 +1,5 @@
+en:
+  site_settings:
+    crowd_sso_url: 'Crowd SSO url'
+    crowd_sso_application_name: 'Application name'
+    crowd_sso_application_password: 'Application password'
