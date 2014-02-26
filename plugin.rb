@@ -21,18 +21,20 @@ class CrowdAuthenticator < ::Auth::Authenticator
     data = auth_token[:info]
 
     result.username = auth_token["uid"]
-    result.name = name = data["name"]
-    result.email = name = data["email"]
+    result.name = data["name"]
+    result.email = data["email"]
 
     # plugin specific data storage
     current_info = ::PluginStore.get("crowd", "crowd_uid_#{result.username}")
 
-    user = User.create(name: result.name,
-                       email: result.email,
-                       username: result.username,
-                       approved: true)
-    ::PluginStore.set("crowd", "crowd_uid_#{user.username}", {user_id: user.id})
-    result.email_valid = true
+    if User.find_by_email(result.email).nil?:
+      user = User.create(name: result.name,
+                         email: result.email,
+                         username: result.username,
+                         approved: true)
+      ::PluginStore.set("crowd", "crowd_uid_#{user.username}", {user_id: user.id})
+      result.email_valid = true
+    end
 
     result.user =
         if current_info
