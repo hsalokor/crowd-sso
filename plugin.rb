@@ -27,7 +27,9 @@ class CrowdAuthenticator < ::Auth::Authenticator
     # plugin specific data storage
     current_info = ::PluginStore.get("crowd", "crowd_uid_#{result.username}")
 
-    if User.find_by_email(result.email).nil?:
+    user = User.find_by_email(result.email)
+    if user.nil?
+      Rails.logger.warn "Creating new user"
       user = User.create(name: result.name,
                          email: result.email,
                          username: result.username,
@@ -38,12 +40,16 @@ class CrowdAuthenticator < ::Auth::Authenticator
 
     result.user =
         if current_info
-          User.where(id: current_info[:user_id]).first
+          Rails.logger.warn "Updating result user from found user"
+          user
         elsif user = User.where(username: result.username).first
+          Rails.logger.warn "User not logged in, marking approved"
           # User has been created, but not logged in
           user.update_attribute(:approved, true)
           ::PluginStore.set("crowd", "crowd_uid_#{result.username}", {user_id: user.id})
           user
+	else
+          Rails.logger.warn "Passed all user checks!"
         end
 
     result
