@@ -16,17 +16,13 @@ class CrowdAuthenticator < ::Auth::Authenticator
 
   def after_authenticate(auth_token)
 
-    Rails.logger.info "Auth token" + auth_token.inspect
-
     result = Auth::Result.new
 
     data = auth_token[:info]
 
-    result.username = data["user"]
+    result.username = auth_token["uid"]
     result.name = name = data["name"]
     result.email = name = data["email"]
-
-    crowd_user_id = auth_token["user"]
 
     # plugin specific data storage
     current_info = ::PluginStore.get("crowd", "crowd_uid_#{result.username}")
@@ -59,9 +55,9 @@ class CrowdAuthenticator < ::Auth::Authenticator
   def register_middleware(omniauth)
     unless SiteSetting.crowd_sso_url.empty?
       omniauth.provider :crowd,
-         :crowd_server_url => SiteSettings.crowd_sso_url,
-         :application_name => SiteSettings.crowd_sso_application_name,
-         :application_password => SiteSettings.crowd_sso_application_password
+         :crowd_server_url => SiteSetting.crowd_sso_url,
+         :application_name => SiteSetting.crowd_sso_application_name,
+         :application_password => SiteSetting.crowd_sso_application_password
     end
   end
 end
@@ -80,7 +76,7 @@ register_css <<CSS
 
 .btn-social.crowd:before {
   font-family: Ubuntu;
-  content: "Crowd";
+  content: "C";
 }
 
 CSS
