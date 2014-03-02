@@ -2,3 +2,5 @@ crowd_sso:
   crowd_sso_url: ''
   crowd_sso_application_name: ''
   crowd_sso_application_password: ''
+  crowd_sso_button_title: 'with Crowd'
+  crowd_sso_button_message: 'Login with Crowd'

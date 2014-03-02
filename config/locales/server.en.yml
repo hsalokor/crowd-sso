@@ -3,3 +3,5 @@ en:
     crowd_sso_url: 'Crowd SSO url'
     crowd_sso_application_name: 'Application name'
     crowd_sso_application_password: 'Application password'
+    crowd_sso_button_title: 'Login button title'
+    crowd_sso_button_message: 'Login button message'

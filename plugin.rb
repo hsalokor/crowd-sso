@@ -69,8 +69,8 @@ class CrowdAuthenticator < ::Auth::Authenticator
   end
 end
 
-auth_provider :title => 'with Crowd',
-              :message => 'Log in via Crowd.',
+auth_provider :title => SiteSetting.crowd_sso_button_title
+              :message => SiteSetting.crowd_sso_button_message,
               :frame_width => 920,
               :frame_height => 800,
               :authenticator => CrowdAuthenticator.new
