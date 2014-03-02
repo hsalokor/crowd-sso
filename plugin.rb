@@ -25,7 +25,7 @@ class CrowdAuthenticator < ::Auth::Authenticator
     result.email = data["email"]
 
     # plugin specific data storage
-    current_info = ::PluginStore.get("crowd", "crowd_uid_#{result.username}")
+    current_info = ::PluginStore.get("crowd", "crowd_uid_#{result.email}")
 
     user = User.find_by_email(result.email)
     if user.nil?
@@ -34,7 +34,7 @@ class CrowdAuthenticator < ::Auth::Authenticator
                          email: result.email,
                          username: result.username,
                          approved: true)
-      ::PluginStore.set("crowd", "crowd_uid_#{user.username}", {user_id: user.id})
+      ::PluginStore.set("crowd", "crowd_uid_#{user.email}", {user_id: user.email})
       result.email_valid = true
     end
 
@@ -46,18 +46,17 @@ class CrowdAuthenticator < ::Auth::Authenticator
           Rails.logger.warn "User not logged in, marking approved"
           # User has been created, but not logged in
           user.update_attribute(:approved, true)
-          ::PluginStore.set("crowd", "crowd_uid_#{result.username}", {user_id: user.id})
+          ::PluginStore.set("crowd", "crowd_uid_#{result.email}", {user_id: user.email})
           user
-	else
+	      else
           Rails.logger.warn "Passed all user checks!"
         end
-
     result
   end
 
   def after_create_account(user, auth)
     user.update_attribute(:approved, true)
-    ::PluginStore.set("crowd", "crowd_uid_#{auth[:username]}", {user_id: user.id})
+    ::PluginStore.set("crowd", "crowd_uid_#{auth[:email]}", {user_id: user.email})
   end
 
   def register_middleware(omniauth)
