@@ -5,7 +5,7 @@
 
 require 'rubygems'
 
-gem 'addressable', '2.3.5', :require => false
+gem 'addressable', '2.3.6', :require => false
 gem 'omniauth_crowd', '2.2.2'
 
 class CrowdAuthenticator < ::Auth::Authenticator
